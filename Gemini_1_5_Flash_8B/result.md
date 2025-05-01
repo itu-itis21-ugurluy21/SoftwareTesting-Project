@@ -1,6 +1,5 @@
 ## Test Results Summary
 
-Here is a summary of the test results based on the provided log, formatted as a Markdown table:
 
 | Function Tested              | Total Tests | Passed | Failed/Errored | Failed/Errored Test Cases                                                                                                                                                           |
 | :--------------------------- | :---------- | :----- | :------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
