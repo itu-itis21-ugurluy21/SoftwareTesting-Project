@@ -261,7 +261,6 @@ class TestEncode(unittest.TestCase):
     def test_encode_with_boundary_letters(self):
         self.assertEqual(encode("azAZ"), "CBcb")  
 
-
 class TestValidDate(unittest.TestCase):
     def test_valid_dates(self):
         self.assertTrue(valid_date("03-11-2000"))
@@ -306,6 +305,13 @@ class TestIntersection(unittest.TestCase):
     def test_length_zero(self):
       self.assertEqual(intersection((1, 3), (4, 5)), "NO")  # Length is 0
 
+    # New Unit tests
+    def test_intersection_negative_ranges(self):
+        self.assertEqual(intersection((-5, -1), (-3, -2)), "NO")
+    
+    def test_intersection_mixed_ranges(self):
+        self.assertEqual(intersection((-5, -1), (-3, 2)), "YES") 
+
 class TestMinPath(unittest.TestCase):
     def test_small_grid(self):
         grid = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
@@ -343,15 +349,17 @@ class TestIsNested(unittest.TestCase):
         self.assertFalse(is_nested("[]"))  # No nesting
         self.assertFalse(is_nested("[[ ]]"))
 
-
     def test_unbalanced(self):
         self.assertFalse(is_nested("[[["))
         self.assertFalse(is_nested("]]]"))
         self.assertFalse(is_nested("]["))
 
-
     def test_empty_string(self):
-        self.assertFalse(is_nested(""))  # Empty string case
+        self.assertFalse(is_nested("")) 
+
+    # New Unit tests
+    def test_is_nested_multiple_levels(self):
+        self.assertTrue(is_nested("[[[[]]]]")) 
 
 class TestFixSpaces(unittest.TestCase):
     def test_basic_examples(self):
@@ -376,6 +384,13 @@ class TestFixSpaces(unittest.TestCase):
     def test_empty_string(self):
         self.assertEqual(fix_spaces(""), "")
 
+    # New Unit tests
+    def test_fix_spaces_two_spaces(self):
+        self.assertEqual(fix_spaces("  "), "__") 
+
+    def test_fix_spaces_three_spaces(self):
+        self.assertEqual(fix_spaces("   "), "---") 
+
 class TestFileNameCheck(unittest.TestCase):
     def test_valid_file_names(self):
         self.assertEqual(file_name_check("example.txt"), "Yes")
@@ -397,6 +412,20 @@ class TestFileNameCheck(unittest.TestCase):
     def test_empty_string(self):
       self.assertEqual(file_name_check(""), "No")
 
+    # New Unit tests
+    def test_wrong_extension(self):
+        self.assertEqual(file_name_check("abc.png"), "No")
+        self.assertEqual(file_name_check("abc.pdf"), "No")
+        self.assertEqual(file_name_check("abc.jpeg"), "No")
+
+    def test_invalid_starting_letter(self):
+        self.assertEqual(file_name_check("1abc.png"), "No")
+        self.assertEqual(file_name_check("-abc.pdf"), "No")
+        self.assertEqual(file_name_check(" abc.pdf"), "No")
+
+    def test_exactly_three_numbers(self):
+        self.assertEqual(file_name_check("abc123.exe"), "Yes")
+    
 class TestIntToMiniRoman(unittest.TestCase):
     def test_basic_conversions(self):
         self.assertEqual(int_to_mini_roman(19), "xix")
@@ -421,6 +450,10 @@ class TestIntToMiniRoman(unittest.TestCase):
         self.assertEqual(int_to_mini_roman(1), "i")  # Single digit
         self.assertEqual(int_to_mini_roman(1000), "m") # Maximum number
 
+    # New unit test
+    def test_int_to_mini_roman_all_symbols(self):
+        self.assertEqual(int_to_mini_roman(944), "cmxliv")
+
 class TestPrimeFib(unittest.TestCase):
     def test_prime_fib_examples(self):
         self.assertEqual(prime_fib(1), 2)
@@ -428,19 +461,23 @@ class TestPrimeFib(unittest.TestCase):
         self.assertEqual(prime_fib(3), 5)
         self.assertEqual(prime_fib(4), 13)  # 5th prime Fibonacci number.
 
-
     def test_prime_fib_larger_values(self):
         self.assertEqual(prime_fib(5), 89) #6th prime fibonacci number
         self.assertEqual(prime_fib(6), 233)  # 7th prime Fibonacci number
 
-
     def test_not_prime(self):
         self.assertEqual(prime_fib(7), 610)
 
-    # Patlıyor ag bu 
     # def test_invalid_input(self):
     #     self.assertIsNone(prime_fib(0))  # test input of 0, should return None
     #     self.assertIsNone(prime_fib(-1))  #test invalid input
+
+    # New Unit Tests
+    def test_prime_fib_zero_or_negative(self):
+        with self.assertRaises(ValueError):
+            prime_fib(0)
+        with self.assertRaises(ValueError):
+            prime_fib(-3)
 
 
 class TestSpecialFilter(unittest.TestCase):
@@ -457,9 +494,8 @@ class TestSpecialFilter(unittest.TestCase):
         self.assertEqual(specialFilter([5, 11, 13]), 1) #Test case with numbers not greater than 10
         self.assertEqual(specialFilter([2, 12, 13]), 1)
 
-
     def test_empty_list(self):
-        self.assertEqual(specialFilter([]), 0)  # Empty list case
+        self.assertEqual(specialFilter([]), 0)  
 
     def test_numbers_less_than_or_equal_to_ten(self):
         self.assertEqual(specialFilter([1,2,11,13,15,17,9]), 4)
@@ -485,7 +521,17 @@ class TestNumericalLetterGrade(unittest.TestCase):
     def test_all_A_plus(self):
         grades = [4.0] * 5
         expected = ["A+"] * 5
-        self.assertEqual(numerical_letter_grade(grades), expected)
+        self.assertEqual(numerical_letter_grade(grades), expected),
+
+    def test_grade_bigger_than_four(self):
+        with self.assertRaises(ValueError):
+            numerical_letter_grade([4.1])
+
+    def test_grade_less_than_zero(self):
+        with self.assertRaises(ValueError):
+            numerical_letter_grade([-1])
+        with self.assertRaises(ValueError):
+            numerical_letter_grade([-15])
 
 class TestClosestInteger(unittest.TestCase):
 
@@ -511,6 +557,7 @@ class TestClosestInteger(unittest.TestCase):
         self.assertEqual(closest_integer("abc"), "Invalid input")
         self.assertEqual(closest_integer(""), "Invalid input")
 
+    # No new unit test
 
 class TestByLength(unittest.TestCase):
 
