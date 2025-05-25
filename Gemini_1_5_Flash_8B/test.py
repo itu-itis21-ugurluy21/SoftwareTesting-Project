@@ -16,6 +16,12 @@ class TestOddCount(unittest.TestCase):
     def test_odd_count_mixed_digits(self):
         self.assertEqual(odd_count(['123', '456', '789']), ['the number of odd elements 3n the str3ng 3 of the 3nput.', 'the number of odd elements 3n the str3ng 3 of the 3nput.', 'the number of odd elements 3n the str3ng 3 of the 3nput.'])
 
+    # New unit tests
+    def test_odd_count_zero(self):
+        self.assertEqual(odd_count(['0246810']),['the number of odd elements 0n the str0ng 0 of the 0nput.'])
+    def test_odd_count_all_odd(self):
+        self.assertEqual(odd_count(['13579']), ['the number of odd elements 5n the str5ng 5 of the 5nput.'])
+
 class TestMaximum(unittest.TestCase):
     def test_maximum_positive(self):
         self.assertEqual(maximum([1, 2, 3, 4, 5], 3), [5, 4, 3])
@@ -36,9 +42,15 @@ class TestMaximum(unittest.TestCase):
     def test_maximum_k_zero(self):
         self.assertEqual(maximum([1, 2, 3], 0), [])
 
-
     def test_maximum_k_equal_length(self):
         self.assertEqual(maximum([1, 2, 3], 3), [3, 2, 1])
+
+    # New unit tests
+    def test_maximum_all_same_elements(self):
+        self.assertEqual(maximum([0, 0, 0, 0], 2), [0, 0])
+
+    def test_maximum_k_bigger_than_array_length(self):
+        self.assertEqual(maximum([0, 0, 0, 0], 5), [0, 0,0,0]) 
 
 class TestAllPrefixes(unittest.TestCase):
     def test_all_prefixes_normal(self):
@@ -53,6 +65,13 @@ class TestAllPrefixes(unittest.TestCase):
 
     def test_all_prefixes_multiple_same_chars(self):
         self.assertEqual(all_prefixes("aaa"), ["a", "aa", "aaa"])
+    
+    # New unit tests
+    def test_all_prefixes_numbers(self):
+        self.assertEqual(all_prefixes("1234"), ["1", "12", "123", "1234"])  
+
+    def test_all_prefixes_special_characters(self):
+        self.assertEqual(all_prefixes("a!@#"), ["a", "a!", "a!@", "a!@#"]) 
 
 class TestDoAlgebra(unittest.TestCase):
     def test_addition(self):
@@ -86,6 +105,8 @@ class TestDoAlgebra(unittest.TestCase):
     def test_error_invalid_expression(self):
         with self.assertRaisesRegex(ValueError, "Invalid expression or operation: invalid syntax"):
             do_algebra(['+', '**'], [2, 3]) 
+    
+    # New unit tests
 
 class TestLargestDivisor(unittest.TestCase):
     def test_positive_numbers(self):
@@ -94,15 +115,23 @@ class TestLargestDivisor(unittest.TestCase):
         self.assertEqual(largest_divisor(20), 10)
 
     def test_edge_cases(self):
-        self.assertEqual(largest_divisor(1), 1)  # Divisor of 1 is 1
+        self.assertEqual(largest_divisor(1), 1)  # Divisor of 1 is 1 # Test case yanlışmış
         self.assertEqual(largest_divisor(2), 1)  # Divisor of 2 is 1
-
 
     def test_large_number(self):
         self.assertEqual(largest_divisor(99), 33)
 
     def test_prime_number(self):
         self.assertEqual(largest_divisor(7), 1)
+
+    # New unit tests
+    # Not sure about the outcome 
+    def test_negative_numbers(self):
+        self.assertEqual(largest_divisor(-7), 1)
+
+    def test_zero(self):
+        with self.assertRaises(ValueError):
+            largest_divisor(0)
 
 class TestChangeBase(unittest.TestCase):
     def test_decimal_to_base3(self):
@@ -117,14 +146,20 @@ class TestChangeBase(unittest.TestCase):
         self.assertEqual(change_base(12, 5), "22")
         self.assertEqual(change_base(25, 5), "100")
 
-
     def test_zero_input(self):
         self.assertEqual(change_base(0, 2), "0")
         self.assertEqual(change_base(0, 5), "0")
 
     def test_invalid_base(self):
       with self.assertRaises(ValueError):
-        change_base(10, 11) # Base greater than 10
+        change_base(10, 11) 
+
+    # New unit tests
+    def test_change_base_boundary_base(self):
+        self.assertEqual(change_base(2, 2), "10")
+
+    def test_change_base_nearly_boundary_base(self):
+        self.assertEqual(change_base(1, 2), "1")
 
 class TestMedian(unittest.TestCase):
     def test_odd_length(self):
@@ -143,6 +178,13 @@ class TestMedian(unittest.TestCase):
         self.assertEqual(median([-10, 4, 6, 1000, 10, 20]), 15.0)
         self.assertEqual(median([100, -10, 0, 10, 5, 20]), 10.0)
 
+    # New unit tests
+    def test_only_negative_numbers(self):
+        self.assertEqual(median([-1, -2, -3, -4]), -2.5)
+    
+    def test_all_same(self):
+        self.assertEqual(median([1, 1, 1, 1]), 1) 
+
 class TestCircularShift(unittest.TestCase):
     def test_positive_shifts(self):
         self.assertEqual(circular_shift(12, 1), "21")
@@ -156,15 +198,20 @@ class TestCircularShift(unittest.TestCase):
         self.assertEqual(circular_shift(12345, -5), "23451")
         self.assertEqual(circular_shift(123, -1), "312")
 
-
     def test_shift_greater_than_digits(self):
       self.assertEqual(circular_shift(123, 4), "312")
       self.assertEqual(circular_shift(123, 6), "312") #shift greater than digits
 
-
     def test_single_digit(self):
         self.assertEqual(circular_shift(5, 1), "5")
         self.assertEqual(circular_shift(5, 2), "5")
+
+    # New unit tests
+    def test_circular_zero_shift(self):
+        self.assertEqual(circular_shift(123, 0), "123") 
+
+    def test_circular_shift_same_as_digit_length(self):
+        self.assertEqual(circular_shift(123, 3), "123")
 
 class TestPluck(unittest.TestCase):
     def test_basic_examples(self):
@@ -172,13 +219,11 @@ class TestPluck(unittest.TestCase):
         self.assertEqual(pluck([1, 2, 3]), [2, 1])
         self.assertEqual(pluck([5, 0, 3, 0, 4, 2]), [0, 1])
 
-
     def test_no_even_numbers(self):
         self.assertEqual(pluck([1, 3, 5, 7]), [])
 		
     def test_empty_array(self):
         self.assertEqual(pluck([]), [])
-
 
     def test_multiple_same_smallest_even(self):
         self.assertEqual(pluck([0, 2, 0, 4]), [0, 0])  # First occurrence of 0
@@ -186,6 +231,9 @@ class TestPluck(unittest.TestCase):
         
     def test_large_array(self):
         self.assertEqual(pluck([10,8, 6, 4, 2, 0]), [0, 5])
+
+    def test_pluck_first_even_is_largest(self):
+        self.assertEqual(pluck([0, 2, 4]), [0, 0]) 
 
 class TestEncode(unittest.TestCase):
     def test_basic_examples(self):
@@ -196,7 +244,6 @@ class TestEncode(unittest.TestCase):
         self.assertEqual(encode("AEIOU"), "CGIKU")
         self.assertEqual(encode("HELLO"), "hELLo")
 
-
     def test_vowels_lower(self):
         self.assertEqual(encode("aeiou"), "CGIKU")
 		
@@ -206,6 +253,14 @@ class TestEncode(unittest.TestCase):
 
     def test_mixed_case_and_no_vowels(self):
         self.assertEqual(encode("ThIs Is a TeSt"), "tHKS ks c tgst")
+
+    # New unit tests
+    def test_encode_with_nonletters(self):
+        self.assertEqual(encode("t1e2st-"), "T1G2ST-")
+
+    def test_encode_with_boundary_letters(self):
+        self.assertEqual(encode("azAZ"), "CBcb")  
+
 
 class TestValidDate(unittest.TestCase):
     def test_valid_dates(self):
