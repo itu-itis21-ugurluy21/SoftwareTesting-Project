@@ -479,7 +479,6 @@ class TestPrimeFib(unittest.TestCase):
         with self.assertRaises(ValueError):
             prime_fib(-3)
 
-
 class TestSpecialFilter(unittest.TestCase):
     def test_positive_numbers(self):
         self.assertEqual(specialFilter([15, 73, 14, 11]), 2)
@@ -499,6 +498,13 @@ class TestSpecialFilter(unittest.TestCase):
 
     def test_numbers_less_than_or_equal_to_ten(self):
         self.assertEqual(specialFilter([1,2,11,13,15,17,9]), 4)
+
+    # New Unit Tests
+    def test_negative_numbers_ignored(self):
+        self.assertEqual(specialFilter([-11, -33, -75, -44]), 0)
+
+    def test_exactly_ten(self):
+        self.assertEqual(specialFilter([10, 10, 10]), 0)  
 
 class TestNumericalLetterGrade(unittest.TestCase):
 
@@ -585,6 +591,16 @@ class TestByLength(unittest.TestCase):
         expected = ["Eight", "Eight", "Three", "Three", "Two", "Two", "One", "One"]
         self.assertEqual(by_length(arr), expected)
 
+    # New Unit Test
+    def test_all_invalid_numbers(self):
+        arr = [-1, 0, 10, 55, 1000]
+        self.assertEqual(by_length(arr), [])
+
+    def test_float_input(self):
+        arr = [1.0, 2.5, 3]
+        expected = ["Three"]
+        self.assertEqual(by_length(arr), expected)
+
 class TestGetClosestVowel(unittest.TestCase):
 
     def test_positive_cases(self):
@@ -604,6 +620,16 @@ class TestGetClosestVowel(unittest.TestCase):
       self.assertEqual(get_closest_vowel("o"), "")
       self.assertEqual(get_closest_vowel("a"), "")
       self.assertEqual(get_closest_vowel("apple"), "e") #add test
+
+
+    # New Unit Tests
+    def test_case_sensitivity(self):
+        self.assertNotEqual(get_closest_vowel("yogurt"), "U")
+        self.assertEqual(get_closest_vowel("FULL"), "u")
+        self.assertEqual(get_closest_vowel("beautiful"), "E")
+    
+    def test_vowel_not_between_consonants(self):
+        self.assertEqual(get_closest_vowel("ear"), "")
 
 class TestAddElements(unittest.TestCase):
 
@@ -644,6 +670,17 @@ class TestAddElements(unittest.TestCase):
         k = 12
         self.assertEqual(add_elements(arr, k), 45)
 
+    # New Unit tests
+    def test_three_digit_numbers(self):
+        arr = [100, 999, 123]
+        k = 3
+        self.assertEqual(add_elements(arr, k), 0)
+
+    def test_edge_digit_range(self):
+        arr = [99, 100, -99, -100]
+        k = 4
+        self.assertEqual(add_elements(arr, k), 0) 
+     
 class TestSumSquares(unittest.TestCase):
 
     def test_positive_cases(self):
@@ -666,6 +703,15 @@ class TestSumSquares(unittest.TestCase):
     def test_mixed_types(self):
       with self.assertRaises(TypeError):
         sum_squares([1, "a", 3])
+
+    # New Unit Test
+    def test_rounding_to_ceiling(self):
+        self.assertEqual(sum_squares([1.1, 1.000001, 1.000000000001]), 8)
+        self.assertEqual(sum_squares([-1.1, -1.000000001]), 2)
+        self.assertEqual(sum_squares([1.999999, 2.999999]), 4 + 9)
+
+    def test_empty_list(self):
+        self.assertEqual(sum_squares([]), 0)
 
 class TestCommon(unittest.TestCase):
 
