@@ -1,4 +1,5 @@
-from Gemini_1_5_Flash_8B.code import *
+#from code import *
+from updated_code import *
 import unittest
 
 class TestOddCount(unittest.TestCase):
@@ -386,6 +387,14 @@ class TestPrimeFib(unittest.TestCase):
     # def test_invalid_input(self):
     #     self.assertIsNone(prime_fib(0))  # test input of 0, should return None
     #     self.assertIsNone(prime_fib(-1))  #test invalid input
+
+
+    # New Unit Tests
+    #def test_prime_fib_zero_or_negative(self):
+    #    with self.assertRaises(ValueError):
+    #        prime_fib(0)
+        #with self.assertRaises(ValueError):
+        #    prime_fib(-3)
 
 
 class TestSpecialFilter(unittest.TestCase):
