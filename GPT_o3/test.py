@@ -1,6 +1,6 @@
 import unittest
 # Adjust the import path to where odd_count is defined
-from o3_functions import *     # ← replace with real module
+from GPT_o3.code import *     # ← replace with real module
 
 
 class TestOddCount(unittest.TestCase):
@@ -125,7 +125,7 @@ class TestDoAlgebra(unittest.TestCase):
             do_algebra(['@'], [2, 3])
     ###self added tests###
     def test_6(self):
-        self.assertEqual(do_algebra(['/'], [1,2]), 0)
+        self.assertEqual(do_algebra(['//'], [1,2]), 0)
     def test_7(self):
         self.assertEqual(do_algebra(['-'], [12,13]), -1)
 
@@ -234,11 +234,13 @@ class TestCircularShift(unittest.TestCase):
     def test_no_shift(self):
         """Zero shift should leave the number unchanged."""
         self.assertEqual(circular_shift(54321, 0), "54321")
-    ###self added tests###
-    def test_6(self):
+
+    #  Newly added unit tests #
+    def test_nearly_full_shift(self):
         self.assertEqual(circular_shift(12345, 4), "23451")
-    def test_7(self):
-        self.assertEqual(circular_shift(123, 4), "312")
+
+    def test_negative_shift(self):
+        self.assertEqual(circular_shift(123, -1), "231")
 
 class TestPluck(unittest.TestCase):
 
@@ -288,11 +290,11 @@ class TestEncode(unittest.TestCase):
     def test_single_letter(self):
         """Edge case: one character."""
         self.assertEqual(encode("A"), "c")
-    ###self added tests###
-    def test_6(self):
-        self.assertEqual(encode("cAr"), "CcR")
-    def test_7(self):
-        self.assertEqual(encode("humanEVAL"), "HVMCNgvcl")
+
+    # Newly Added Test Cases #
+    def test_edge_letters(self):
+        self.assertEqual(encode("uU"), "Ww")
+
 
 class TestByLength(unittest.TestCase):
 
@@ -580,11 +582,13 @@ class TestCheckDictCase(unittest.TestCase):
     def test_empty_dict(self):
         """Empty dictionary must return False."""
         self.assertFalse(check_dict_case({}))
-    ###self added tests###
-    def test_6(self):
-        self.assertFalse(check_dict_case({"Key1": 1, "Key2": 2, "key2": 3}))
-    def test_7(self):
-        self.assertTrue(check_dict_case({".*": 1, "+": 2, "-/": 3}))
+
+    # Newly added unit tests #
+    def test_mixed_strings(self):
+        self.assertTrue(check_dict_case({"KEY-1231231": "1", "K123E123Y": 2, "K--123E12387Y": False}))
+    
+    def test_non_letters(self):
+        self.assertFalse(check_dict_case({".*123": 1, "+12": 2, "1-2/3": 3}))
     
 
 class TestValidDate(unittest.TestCase):
@@ -852,11 +856,19 @@ class TestIntToMiniRoman(unittest.TestCase):
             numeral = int_to_mini_roman(n)
             for sym in ("i", "x", "c", "m"):
                 self.assertNotIn(sym * 4, numeral)
-    ###self added tests###
-    def test_6(self):
-        self.assertEqual(int_to_mini_roman(-1),   "")
-    def test_7(self):
-        self.assertEqual(int_to_mini_roman(5),   "v")
+
+    # New Unit tests # 
+    def test_subtractive_notation(self):
+        subtractive_cases = {
+            4: "iv",
+            9: "ix",
+            40: "xl",
+            90: "xc",
+            400: "cd",
+            900: "cm"
+        }
+        for num, expected in subtractive_cases.items():
+            self.assertEqual(int_to_mini_roman(num), expected)
 
 class TestPrimeFib(unittest.TestCase):
 
@@ -884,9 +896,11 @@ class TestPrimeFib(unittest.TestCase):
             current = prime_fib(k)
             self.assertGreater(current, prev)
             prev = current
-    ###self added tests###
-    def test_6(self):
-        self.assertEqual(prime_fib(11), 2971215073)
+
+    # Newly added tests #
+    def test_prime_fib_zero_or_negative(self):
+        self.assertEqual(prime_fib(0), False)
+        self.assertEqual(prime_fib(-1), False)
 
 class TestNumericalLetterGrade(unittest.TestCase):
 
@@ -967,6 +981,3 @@ class TestClosestInteger(unittest.TestCase):
     def test_6(self):
         self.assertEqual(closest_integer("-0.1"), 0)  
         self.assertEqual(closest_integer("14.49"), 14)
-
-if __name__ == "__main__":
-    unittest.main()

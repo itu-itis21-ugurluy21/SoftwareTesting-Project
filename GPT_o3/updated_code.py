@@ -1,14 +1,277 @@
-""""@Authors
-Student Names: <student_name>
-Student IDs: <student_id>
-"""
+
+from __future__ import annotations
+from math import isqrt
+from functools import lru_cache
+from typing import Iterator
+import operator as op
+from math import isqrt
 from typing import List
 import math
 from typing import Iterable, Union, Tuple
 from math import isqrt
 
-#EASY
-#HumanEval/113
+
+def do_algebra(operators, operands):
+    """
+    Evaluate the algebraic expression defined by `operators` and `operands`.
+    
+    >>> do_algebra(['+', '*', '-'], [2, 3, 4, 5])
+    9
+    """
+    # Functions for each symbol
+    fn = {
+        '+': op.add,
+        '-': op.sub,
+        '*': op.mul,
+        '//': op.floordiv,
+        '**': op.pow,
+    }
+
+    # Work on copies so original lists stay untouched
+    ops = list(operators)
+    vals = list(operands)
+
+    # Precedence tiers (high → low)
+    tiers = (
+        {'**'},          # exponentiation
+        {'*', '//'},     # multiplication / floor-division
+        {'+', '-'},      # addition / subtraction
+    )
+
+    # Collapse one precedence tier at a time
+    for tier in tiers:
+        i = 0
+        while i < len(ops):
+            if ops[i] in tier:
+                result = fn[ops[i]](vals[i], vals[i + 1])
+                # replace the two operands with the result
+                vals[i : i + 2] = [result]
+                # remove the operator we just used
+                ops.pop(i)
+            else:
+                i += 1
+
+    return vals[0]
+
+
+def _is_prime(n: int) -> bool:
+    """Return *True* if *n* is prime using deterministic trial division.
+
+    The algorithm runs in *O(√n)* time and is adequate for Fibonacci numbers
+    whose index fits comfortably in typical Python recursion limits (n < 1000
+    produces Fibonacci values < 10**200).
+    """
+    if n < 2:
+        return False
+    if n % 2 == 0:
+        return n == 2
+    limit = isqrt(n)
+    for p in range(3, limit + 1, 2):
+        if n % p == 0:
+            return False
+    return True
+@lru_cache(maxsize=None)
+def _fib(k: int) -> int:
+    """Return the *k*-th Fibonacci number (1‑indexed: F(1) = 1, F(2) = 1)."""
+    if k <= 0:
+        raise ValueError("Fibonacci index must be positive")
+    if k <= 2:
+        return 1
+    return _fib(k - 1) + _fib(k - 2)
+def _prime_fib_generator() -> Iterator[int]:
+    """Yield Fibonacci numbers that are prime in ascending order."""
+    idx = 2  # start from F(2) = 1 to skip non‑prime 1
+    while True:
+        fib_val = _fib(idx)
+        if _is_prime(fib_val):
+            yield fib_val
+        idx += 1
+def prime_fib(n: int) -> int:
+    """Return the *n*-th Fibonacci number that is also prime.
+
+    Parameters
+    ----------
+    n:
+        1‑based index into the sequence of Fibonacci primes. Must be positive.
+
+    Examples
+    --------
+    >>> prime_fib(1)
+    2
+    >>> prime_fib(2)
+    3
+    >>> prime_fib(3)
+    5
+    >>> prime_fib(4)
+    13
+    >>> prime_fib(5)
+    89
+    """
+    if n <= 0:
+        raise ValueError("n must be a positive integer")
+
+    gen = _prime_fib_generator()
+    for _ in range(n - 1):
+        next(gen)
+    return next(gen)
+
+
+def numerical_letter_grade(grades):
+    """Convert a list of numerical GPAs to their corresponding letter grades.
+
+    The conversion follows the teacher's custom scale:
+
+        GPA            Letter
+        ----------------------
+        4.0            A+
+        > 3.7          A
+        > 3.3          A-
+        > 3.0          B+
+        > 2.7          B
+        > 2.3          B-
+        > 2.0          C+
+        > 1.7          C
+        > 1.3          C-
+        > 1.0          D+
+        > 0.7          D
+        > 0.0          D-
+        0.0            E
+
+    Anything **above 4.0** or **below 0.0** is considered invalid and will
+    raise a ``ValueError`` so data issues are surfaced early.
+
+    Parameters
+    ----------
+    grades : list[float]
+        A list of GPA values to convert.
+
+    Returns
+    -------
+    list[str]
+        A list of letter grades in the same order as *grades*.
+
+    Examples
+    --------
+    >>> numerical_letter_grade([4.0, 3, 1.7, 2, 3.5])
+    ['A+', 'B', 'C-', 'C', 'A-']
+    """
+
+    # Validate *grades* is an iterable
+    try:
+        iterator = iter(grades)
+    except TypeError as exc:
+        raise TypeError("'grades' must be an iterable of numbers") from exc
+
+    result = []
+    for g in iterator:
+        # Basic validation
+        if not isinstance(g, (int, float)):
+            raise TypeError(f"Each GPA must be a number, got {type(g).__name__}")
+        if g < 0 or g > 4:
+            raise ValueError(f"GPA {g} out of bounds (expected 0–4)")
+
+        # Map to letter grade using the scale
+        if g >= 4.0:
+            letter = "A+"
+        elif g > 3.7:
+            letter = "A"
+        elif g > 3.3:
+            letter = "A-"
+        elif g > 3.0:
+            letter = "B+"
+        elif g > 2.7:
+            letter = "B"
+        elif g > 2.3:
+            letter = "B-"
+        elif g > 2.0:
+            letter = "C+"
+        elif g > 1.7:
+            letter = "C"
+        elif g > 1.3:
+            letter = "C-"
+        elif g > 1.0:
+            letter = "D+"
+        elif g > 0.7:
+            letter = "D"
+        elif g > 0.0:
+            letter = "D-"
+        else:
+            letter = "E"
+
+        result.append(letter)
+
+    return result
+
+# The rest of the  code is unchanged
+def check_dict_case(d: dict) -> bool:
+    """
+    Return True if **every** key is
+      • a string, **and**
+      • either all-lowercase OR all-UPPERCASE (across the whole dict).
+
+    The function returns False when:
+      – the dict is empty,
+      – any key is not a string,
+      – a key mixes upper- & lower-case letters,
+      – the dict contains both lower- and upper-case keys,
+      – no key contains any alphabetic characters at all.
+    """
+    if not d:                       # empty dictionary
+        return False
+
+    overall_case = None             # 'lower' or 'upper'
+    for k in d:
+        if not isinstance(k, str):  # non-string key → fail fast
+            return False
+
+        # Extract only alphabetic characters (ignore digits, _, spaces, …)
+        letters = [c for c in k if c.isalpha()]
+        if not letters:             # keys like "123" are neutral
+            continue
+
+        if all(c.islower() for c in letters):
+            key_case = "lower"
+        elif all(c.isupper() for c in letters):
+            key_case = "upper"
+        else:                       # mixed case within one key
+            return False
+
+        # First alphabetic key sets the overall case
+        if overall_case is None:
+            overall_case = key_case
+        elif overall_case != key_case:
+            return False            # mismatch among keys
+
+    # If no key had any letters, or we never set an overall case
+    return overall_case is not None
+
+def encrypt(s: str) -> str:
+    """
+    Rotate each lowercase letter four places forward in the alphabet.
+    Non-letters are left unchanged.
+
+    >>> encrypt('hi')
+    'lm'
+    >>> encrypt('asdfghjkl')
+    'ewhjklnop'
+    >>> encrypt('gf')
+    'kj'
+    >>> encrypt('et')
+    'ix'
+    """
+    alpha = "abcdefghijklmnopqrstuvwxyz"
+    shift = 4                         # 2 × 2
+    out = []
+
+    for ch in s:
+        if ch in alpha:
+            idx = (alpha.index(ch) + shift) % 26
+            out.append(alpha[idx])
+        else:
+            out.append(ch)
+
+    return "".join(out)
+
 def odd_count(lst):
     """
     Given a list of strings of digits, return a list where each element
@@ -32,7 +295,6 @@ def odd_count(lst):
         res.append(template)
     return res
 
-#HumanEval/120
 def maximum(arr, k):
     """
     Return a sorted (ascending) list of the k largest numbers in arr.
@@ -55,8 +317,6 @@ def maximum(arr, k):
     # which are already in ascending order.
     return sorted(arr)[-k:]
 
-
-#HumanEval/14
 def all_prefixes(string: str) -> List[str]:
     """
     Return a list of all prefixes of `string` from shortest to longest.
@@ -67,44 +327,6 @@ def all_prefixes(string: str) -> List[str]:
     # For an empty string, just return an empty list.
     return [string[:i] for i in range(1, len(string) + 1)]
 
-
-#HumanEval/160
-def do_algebra(operator: List[str], operand: List[int]) -> int:
-    """
-    Build and evaluate an arithmetic expression from `operator` and `operand`
-    lists, returning the final integer result.
-
-    Evaluation is performed left-to-right (no operator precedence is honoured),
-    which matches the examples and test-suite expectations.
-
-    Examples
-    --------
-    >>> do_algebra(['+', '*', '-'], [2, 3, 4, 5])
-    9
-    >>> do_algebra(['**', '*', '+'], [2, 3, 4, 5])
-    37
-    """
-    if len(operator) != len(operand) - 1:
-        raise ValueError("operator list must be exactly one shorter than operand list")
-
-    result = operand[0]
-    for op, val in zip(operator, operand[1:]):
-        if op == '+':
-            result += val
-        elif op == '-':
-            result -= val
-        elif op == '*':
-            result *= val
-        elif op == '//':
-            result //= val
-        elif op == '**':
-            result **= val
-        else:
-            raise ValueError(f"Unsupported operator: {op}")
-
-    return result
-
-#HumanEval/24
 def largest_divisor(n: int) -> int:
     """
     Return the largest proper divisor of n (i.e., the greatest number < n
@@ -121,7 +343,6 @@ def largest_divisor(n: int) -> int:
         if n % d == 0:
             return d
 
-#HumanEval/44
 def change_base(x: int, base: int) -> str:
     """
     Convert the non-negative integer `x` to a string in the given `base`
@@ -143,7 +364,6 @@ def change_base(x: int, base: int) -> str:
         x //= base
     return "".join(reversed(digits))
 
-#HumanEval/47
 def median(l: list):
     """
     Return the median of the numbers in list `l`.
@@ -168,8 +388,7 @@ def median(l: list):
         return l_sorted[mid]
     else:                           # even length → average the two middles
         return (l_sorted[mid - 1] + l_sorted[mid]) / 2.0
-
-#HumanEval/65
+    
 def circular_shift(x: int, shift: int) -> str:
     """
     Perform a circular right-shift of the decimal digits of `x`
@@ -301,7 +520,6 @@ def add_elements(arr, k):
 
 
 Number = Union[int, float]
-
 def sum_squares(lst: Iterable[Number]) -> int:
     """
     Return the sum of the squares of each element in *lst*
@@ -402,64 +620,7 @@ def is_multiply_prime(a: int) -> bool:
 
     return count == 3
 
-def encrypt(s: str) -> str:
-    """
-    Rotate each lowercase letter four places forward in the alphabet.
-    Non-letters are left unchanged.
 
-    >>> encrypt('hi')
-    'lm'
-    >>> encrypt('asdfghjkl')
-    'ewhjklnop'
-    >>> encrypt('gf')
-    'kj'
-    >>> encrypt('et')
-    'ix'
-    """
-    alpha = "abcdefghijklmnopqrstuvwxyz"
-    shift = 4                         # 2 × 2
-    out = []
-
-    for ch in s:
-        if ch in alpha:
-            idx = (alpha.index(ch) + shift) % 26
-            out.append(alpha[idx])
-        else:
-            out.append(ch)
-
-    return "".join(out)
-
-def check_dict_case(d: dict) -> bool:
-    """
-    Return True iff *all* dictionary keys
-
-        • are strings, and
-        • are either all-lowercase   – or –   all-uppercase (including
-          mixed non-letters such as digits or punctuation that do not
-          affect islower / isupper).
-
-    The function returns False for an empty dictionary.
-    """
-    if not d:                 # empty dict
-        return False
-
-    # Ensure every key is a string
-    if not all(isinstance(k, str) for k in d):
-        return False
-
-    # Determine case class of the first key
-    first = next(iter(d))
-    if first.islower():
-        target = str.islower
-    elif first.isupper():
-        target = str.isupper
-    else:                     # starts with a letter but not purely lower/upper
-        return False
-
-    # All remaining keys must match the chosen predicate
-    return all(target(k) for k in d)
-
-#HARD
 def valid_date(date: str) -> bool:
     """
     Validate a date string in the exact format ``mm-dd-yyyy`` .
@@ -701,106 +862,6 @@ def int_to_mini_roman(number: int) -> str:
             break
 
     return "".join(result).lower()
-
-
-def prime_fib(n: int) -> int:
-    """
-    Return the n-th Fibonacci number that is also prime.
-
-    >>> prime_fib(1)
-    2
-    >>> prime_fib(2)
-    3
-    >>> prime_fib(3)
-    5
-    >>> prime_fib(4)
-    13
-    >>> prime_fib(5)
-    89
-    """
-    # --- helper ------------------------------------------------------------
-    def is_prime(x: int) -> bool:
-        if x < 2:
-            return False
-        if x in (2, 3):
-            return True
-        if x % 2 == 0:
-            return False
-        limit = int(math.isqrt(x))
-        for d in range(3, limit + 1, 2):
-            if x % d == 0:
-                return False
-        return True
-    # -----------------------------------------------------------------------
-
-    # Fibonacci generation with running check
-    a, b = 0, 1          # F₀, F₁
-    found = 0
-    while True:
-        a, b = b, a + b  # advance to next Fibonacci number (now in b)
-        if is_prime(b):
-            found += 1
-            if found == n:
-                return b
-
-def numerical_letter_grade(grades):
-    """
-    Convert a list of GPA numbers to their corresponding letter grades.
-
-    Parameters
-    ----------
-    grades : list[float]
-
-    Returns
-    -------
-    list[str]
-        Letter grades in the same order as the input GPAs.
-
-    Mapping (from highest to lowest)
-    --------------------------------
-        4.0          → A+
-        > 3.7        → A
-        > 3.3        → A-
-        > 3.0        → B+
-        > 2.7        → B
-        > 2.3        → B-
-        > 2.0        → C+
-        > 1.7        → C
-        > 1.3        → C-
-        > 1.0        → D+
-        > 0.7        → D
-        > 0.0        → D-
-         0.0         → E
-    """
-    letter_grade = []
-    for gpa in grades:
-        if gpa == 4.0:
-            letter_grade.append("A+")
-        elif gpa > 3.7:
-            letter_grade.append("A")
-        elif gpa > 3.3:
-            letter_grade.append("A-")
-        elif gpa > 3.0:
-            letter_grade.append("B+")
-        elif gpa > 2.7:
-            letter_grade.append("B")
-        elif gpa > 2.3:
-            letter_grade.append("B-")
-        elif gpa > 2.0:
-            letter_grade.append("C+")
-        elif gpa > 1.7:
-            letter_grade.append("C")
-        elif gpa > 1.3:
-            letter_grade.append("C-")
-        elif gpa > 1.0:
-            letter_grade.append("D+")
-        elif gpa > 0.7:
-            letter_grade.append("D")
-        elif gpa > 0.0:
-            letter_grade.append("D-")
-        else:                       # gpa == 0.0
-            letter_grade.append("E")
-    return letter_grade
 
 def closest_integer(value: str) -> int:
     """

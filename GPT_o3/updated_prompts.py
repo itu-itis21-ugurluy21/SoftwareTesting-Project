@@ -1,0 +1,10 @@
+"\ndef do_algebra(operator, operand):\n \"\"\"\n Given two lists operator, and operand. The first list has basic algebra operations, and \n the second list is a list of integers. Use the two given lists to build the algebric \n expression and return the evaluation of this expression.\n\n The basic algebra operations:\n Addition ( + ) \n Subtraction ( - ) \n Multiplication ( * ) \n Floor division ( // ) \n Exponentiation ( ** ) \n\n Example:\n operator['+', '*', '-']\n array = [2, 3, 4, 5]\n result = 2 + 3 * 4 - 5\n => result = 9\n\n Note:\n The length of operator list is equal to the length of operand list minus one.\n Operand is a list of of non-negative integers.\n Operator list has at least one operator, and operand list has at least two operands.\n\n \"\"\"\n Make sure to care operator precedence"
+
+
+
+"\n\ndef prime_fib(n: int):\n \"\"\"\n prime_fib returns n-th number that is a Fibonacci number and it's also prime.\n >>> prime_fib(1)\n 2\n >>> prime_fib(2)\n 3\n >>> prime_fib(3)\n 5\n >>> prime_fib(4)\n 13\n >>> prime_fib(5)\n 89\n \"\"\"\n Make sure that the code does not produce any bugs"
+
+
+r''' 
+"\ndef numerical_letter_grade(grades):\n \"\"\"It is the last week of the semester and the teacher has to give the grades\n to students. The teacher has been making her own algorithm for grading.\n The only problem is, she has lost the code she used for grading.\n She has given you a list of GPAs for some students and you have to write \n a function that can output a list of letter grades using the following table:\n GPA | Letter grade\n 4.0 A+\n > 3.7 A \n > 3.3 A- \n > 3.0 B+\n > 2.7 B \n > 2.3 B-\n > 2.0 C+\n > 1.7 C\n > 1.3 C-\n > 1.0 D+ \n > 0.7 D \n > 0.0 D-\n 0.0 E\n \n\n Example:\n grade_equation([4.0, 3, 1.7, 2, 3.5]) ==> ['A+', 'B', 'C-', 'C', 'A-']\n \"\"\"\n","entry_point":"numerical_letter_grade" Make sure to handle grades more than 4 and less than 0" 
+'''

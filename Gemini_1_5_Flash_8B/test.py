@@ -19,7 +19,7 @@ class TestOddCount(unittest.TestCase):
 
     # New unit tests
     def test_odd_count_zero(self):
-        self.assertEqual(odd_count(['0246810']),['the number of odd elements 0n the str0ng 0 of the 0nput.'])
+        self.assertEqual(odd_count(['024680']),['the number of odd elements 0n the str0ng 0 of the 0nput.'])
     def test_odd_count_all_odd(self):
         self.assertEqual(odd_count(['13579']), ['the number of odd elements 5n the str5ng 5 of the 5nput.'])
 
@@ -108,6 +108,8 @@ class TestDoAlgebra(unittest.TestCase):
             do_algebra(['+', '**'], [2, 3]) 
     
     # New unit tests
+    def test_single_floor_division_returns_zero(self):
+        self.assertEqual(do_algebra(['//'], [1,2]), 0)
 
 class TestLargestDivisor(unittest.TestCase):
     def test_positive_numbers(self):
@@ -126,13 +128,11 @@ class TestLargestDivisor(unittest.TestCase):
         self.assertEqual(largest_divisor(7), 1)
 
     # New unit tests
-    # Not sure about the outcome 
     def test_negative_numbers(self):
         self.assertEqual(largest_divisor(-7), 1)
 
     def test_zero(self):
-        with self.assertRaises(ValueError):
-            largest_divisor(0)
+        self.assertEqual(largest_divisor(0), 1)
 
 class TestChangeBase(unittest.TestCase):
     def test_decimal_to_base3(self):
@@ -469,9 +469,6 @@ class TestPrimeFib(unittest.TestCase):
     def test_not_prime(self):
         self.assertEqual(prime_fib(7), 610)
 
-    # def test_invalid_input(self):
-    #     self.assertIsNone(prime_fib(0))  # test input of 0, should return None
-    #     self.assertIsNone(prime_fib(-1))  #test invalid input
 
     # New Unit Tests
     def test_prime_fib_zero_or_negative(self):
@@ -479,14 +476,6 @@ class TestPrimeFib(unittest.TestCase):
             prime_fib(0)
         with self.assertRaises(ValueError):
             prime_fib(-3)
-
-    # New Unit Tests
-    #def test_prime_fib_zero_or_negative(self):
-    #    with self.assertRaises(ValueError):
-    #        prime_fib(0)
-        #with self.assertRaises(ValueError):
-        #    prime_fib(-3)
-
 
 class TestSpecialFilter(unittest.TestCase):
     def test_positive_numbers(self):
