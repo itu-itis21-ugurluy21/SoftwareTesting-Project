@@ -2,6 +2,7 @@
 from updated_code import *
 import unittest
 
+# New added
 class TestOddCount(unittest.TestCase):
     def test_odd_count_single_string(self):
         self.assertEqual(odd_count(['1234567']), ['the number of odd elements 4n the str4ng 4 of the 4nput.'])
@@ -23,6 +24,7 @@ class TestOddCount(unittest.TestCase):
     def test_odd_count_all_odd(self):
         self.assertEqual(odd_count(['13579']), ['the number of odd elements 5n the str5ng 5 of the 5nput.'])
 
+# New added
 class TestMaximum(unittest.TestCase):
     def test_maximum_positive(self):
         self.assertEqual(maximum([1, 2, 3, 4, 5], 3), [5, 4, 3])
@@ -53,6 +55,7 @@ class TestMaximum(unittest.TestCase):
     def test_maximum_k_bigger_than_array_length(self):
         self.assertEqual(maximum([0, 0, 0, 0], 5), [0, 0,0,0]) 
 
+# New added
 class TestAllPrefixes(unittest.TestCase):
     def test_all_prefixes_normal(self):
         self.assertEqual(all_prefixes("abc"), ["a", "ab", "abc"])
@@ -74,6 +77,7 @@ class TestAllPrefixes(unittest.TestCase):
     def test_all_prefixes_special_characters(self):
         self.assertEqual(all_prefixes("a!@#"), ["a", "a!", "a!@", "a!@#"]) 
 
+# New added
 class TestDoAlgebra(unittest.TestCase):
     def test_addition(self):
         self.assertEqual(do_algebra(['+'], [2, 3]), 5)
@@ -111,6 +115,7 @@ class TestDoAlgebra(unittest.TestCase):
     def test_single_floor_division_returns_zero(self):
         self.assertEqual(do_algebra(['//'], [1,2]), 0)
 
+# New added
 class TestLargestDivisor(unittest.TestCase):
     def test_positive_numbers(self):
         self.assertEqual(largest_divisor(15), 5)
@@ -134,6 +139,7 @@ class TestLargestDivisor(unittest.TestCase):
     def test_zero(self):
         self.assertEqual(largest_divisor(0), 1)
 
+# New added
 class TestChangeBase(unittest.TestCase):
     def test_decimal_to_base3(self):
         self.assertEqual(change_base(8, 3), "22")
@@ -162,6 +168,7 @@ class TestChangeBase(unittest.TestCase):
     def test_change_base_nearly_boundary_base(self):
         self.assertEqual(change_base(1, 2), "1")
 
+# New added
 class TestMedian(unittest.TestCase):
     def test_odd_length(self):
         self.assertEqual(median([3, 1, 2, 4, 5]), 3)
@@ -186,6 +193,7 @@ class TestMedian(unittest.TestCase):
     def test_all_same(self):
         self.assertEqual(median([1, 1, 1, 1]), 1) 
 
+# New added
 class TestCircularShift(unittest.TestCase):
     def test_positive_shifts(self):
         self.assertEqual(circular_shift(12, 1), "21")
@@ -214,6 +222,7 @@ class TestCircularShift(unittest.TestCase):
     def test_circular_shift_same_as_digit_length(self):
         self.assertEqual(circular_shift(123, 3), "123")
 
+# New added
 class TestPluck(unittest.TestCase):
     def test_basic_examples(self):
         self.assertEqual(pluck([4, 2, 3]), [2, 1])
@@ -234,8 +243,15 @@ class TestPluck(unittest.TestCase):
         self.assertEqual(pluck([10,8, 6, 4, 2, 0]), [0, 5])
 
     def test_pluck_first_even_is_largest(self):
-        self.assertEqual(pluck([0, 2, 4]), [0, 0]) 
+        self.assertEqual(pluck([0, 2, 4]), [0, 0])
 
+    ###self added tests###
+    def test_smallest_in_the_end(self):
+        self.assertEqual(pluck([1,2,3,4,5,6,0]), [0,6])
+    def test_all_same(self):
+        self.assertEqual(pluck([2,2,2,2,2,2]), [2,0])
+
+# New added
 class TestEncode(unittest.TestCase):
     def test_basic_examples(self):
         self.assertEqual(encode("test"), "TGST")
@@ -260,7 +276,7 @@ class TestEncode(unittest.TestCase):
         self.assertEqual(encode("t1e2st-"), "T1G2ST-")
 
     def test_encode_with_boundary_letters(self):
-        self.assertEqual(encode("azAZ"), "CBcb")  
+        self.assertEqual(encode("azAZ"), "CZcz")  
 
 class TestValidDate(unittest.TestCase):
     def test_valid_dates(self):
@@ -286,6 +302,7 @@ class TestValidDate(unittest.TestCase):
     def test_invalid_format(self):
       self.assertFalse(valid_date("04/05/2024"))  # Incorrect format
 
+# New Added
 class TestIntersection(unittest.TestCase):
     def test_positive_intersections(self):
         self.assertEqual(intersection((1, 3), (2, 4)), "NO")  # Intersection is (2, 3) - length 1
@@ -338,6 +355,7 @@ class TestMinPath(unittest.TestCase):
       self.assertEqual(minPath([], 1), []) #Test with empty grid
       self.assertEqual(minPath([[1]], 1), [1])
 
+# New added
 class TestIsNested(unittest.TestCase):
     def test_nested_subsequences(self):
         self.assertTrue(is_nested("[[]]"))
@@ -362,6 +380,7 @@ class TestIsNested(unittest.TestCase):
     def test_is_nested_multiple_levels(self):
         self.assertTrue(is_nested("[[[[]]]]")) 
 
+# New added
 class TestFixSpaces(unittest.TestCase):
     def test_basic_examples(self):
         self.assertEqual(fix_spaces("Example"), "Example")
@@ -390,8 +409,9 @@ class TestFixSpaces(unittest.TestCase):
         self.assertEqual(fix_spaces("  "), "__") 
 
     def test_fix_spaces_three_spaces(self):
-        self.assertEqual(fix_spaces("   "), "---") 
+        self.assertEqual(fix_spaces("   "), "-") 
 
+# New added
 class TestFileNameCheck(unittest.TestCase):
     def test_valid_file_names(self):
         self.assertEqual(file_name_check("example.txt"), "Yes")
@@ -426,7 +446,8 @@ class TestFileNameCheck(unittest.TestCase):
 
     def test_exactly_three_numbers(self):
         self.assertEqual(file_name_check("abc123.exe"), "Yes")
-    
+
+# New added
 class TestIntToMiniRoman(unittest.TestCase):
     def test_basic_conversions(self):
         self.assertEqual(int_to_mini_roman(19), "xix")
@@ -455,6 +476,7 @@ class TestIntToMiniRoman(unittest.TestCase):
     def test_int_to_mini_roman_all_symbols(self):
         self.assertEqual(int_to_mini_roman(944), "cmxliv")
 
+# New Added
 class TestPrimeFib(unittest.TestCase):
     def test_prime_fib_examples(self):
         self.assertEqual(prime_fib(1), 2)
@@ -477,6 +499,7 @@ class TestPrimeFib(unittest.TestCase):
         with self.assertRaises(ValueError):
             prime_fib(-3)
 
+# New Added
 class TestSpecialFilter(unittest.TestCase):
     def test_positive_numbers(self):
         self.assertEqual(specialFilter([15, 73, 14, 11]), 2)
@@ -504,6 +527,7 @@ class TestSpecialFilter(unittest.TestCase):
     def test_exactly_ten(self):
         self.assertEqual(specialFilter([10, 10, 10]), 0)  
 
+# New Added
 class TestNumericalLetterGrade(unittest.TestCase):
 
     def test_various_grades(self):
@@ -537,6 +561,7 @@ class TestNumericalLetterGrade(unittest.TestCase):
         with self.assertRaises(ValueError):
             numerical_letter_grade([-15])
 
+# New Added
 class TestClosestInteger(unittest.TestCase):
 
     def test_positive_numbers(self):
@@ -563,6 +588,7 @@ class TestClosestInteger(unittest.TestCase):
 
     # No new unit test
 
+# New added
 class TestByLength(unittest.TestCase):
 
     def test_valid_input(self):
@@ -594,11 +620,8 @@ class TestByLength(unittest.TestCase):
         arr = [-1, 0, 10, 55, 1000]
         self.assertEqual(by_length(arr), [])
 
-    def test_float_input(self):
-        arr = [1.0, 2.5, 3]
-        expected = ["Three"]
-        self.assertEqual(by_length(arr), expected)
 
+# New added
 class TestGetClosestVowel(unittest.TestCase):
 
     def test_positive_cases(self):
@@ -623,12 +646,12 @@ class TestGetClosestVowel(unittest.TestCase):
     # New Unit Tests
     def test_case_sensitivity(self):
         self.assertNotEqual(get_closest_vowel("yogurt"), "U")
-        self.assertEqual(get_closest_vowel("FULL"), "u")
-        self.assertEqual(get_closest_vowel("beautiful"), "E")
+        self.assertEqual(get_closest_vowel("FULL"), "U")
     
     def test_vowel_not_between_consonants(self):
         self.assertEqual(get_closest_vowel("ear"), "")
 
+# New added
 class TestAddElements(unittest.TestCase):
 
     def test_positive_cases(self):
@@ -678,7 +701,8 @@ class TestAddElements(unittest.TestCase):
         arr = [99, 100, -99, -100]
         k = 4
         self.assertEqual(add_elements(arr, k), 0) 
-     
+
+# New added 
 class TestSumSquares(unittest.TestCase):
 
     def test_positive_cases(self):
@@ -704,7 +728,7 @@ class TestSumSquares(unittest.TestCase):
 
     # New Unit Test
     def test_rounding_to_ceiling(self):
-        self.assertEqual(sum_squares([1.1, 1.000001, 1.000000000001]), 8)
+        self.assertEqual(sum_squares([1.1, 1.000001, 1.000000000001]), 12)
         self.assertEqual(sum_squares([-1.1, -1.000000001]), 2)
         self.assertEqual(sum_squares([1.999999, 2.999999]), 4 + 9)
 
@@ -794,7 +818,7 @@ class TestIsMultiplyPrime(unittest.TestCase):
     def test_prime_number(self):
         self.assertFalse(is_multiply_prime(7))
 
-
+# New added
 class TestEncrypt(unittest.TestCase):
 
     def test_positive_cases(self):
@@ -818,6 +842,7 @@ class TestEncrypt(unittest.TestCase):
         self.assertEqual(encrypt('zyxw'), 'cdef')
         self.assertEqual(encrypt('ZYXW'), 'CDEF')
 
+# New added
 class TestCheckDictCase(unittest.TestCase):
     def test_all_lower(self):
         self.assertTrue(check_dict_case({"a": "apple", "b": "banana"}))
@@ -838,3 +863,10 @@ class TestCheckDictCase(unittest.TestCase):
     def test_one_key(self):
         self.assertTrue(check_dict_case({"a":"a"})) #Test case with single key
         self.assertTrue(check_dict_case({"A":"A"})) #Test case with single key (all upper)
+
+    # Newly added unit tests #
+    def test_mixed_strings(self):
+        self.assertTrue(check_dict_case({"KEY-1231231": "1", "K123E123Y": 2, "K--123E12387Y": False}))
+    
+    def test_non_letters(self):
+        self.assertFalse(check_dict_case({".*123": 1, "+12": 2, "1-2/3": 3}))
