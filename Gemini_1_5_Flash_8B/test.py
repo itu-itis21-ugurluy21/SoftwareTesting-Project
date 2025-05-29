@@ -302,6 +302,8 @@ class TestValidDate(unittest.TestCase):
     def test_invalid_format(self):
       self.assertFalse(valid_date("04/05/2024"))  # Incorrect format
 
+    
+
 # New Added
 class TestIntersection(unittest.TestCase):
     def test_positive_intersections(self):
@@ -329,6 +331,7 @@ class TestIntersection(unittest.TestCase):
     
     def test_intersection_mixed_ranges(self):
         self.assertEqual(intersection((-5, -1), (-3, 2)), "YES") 
+
 
 class TestMinPath(unittest.TestCase):
     def test_small_grid(self):
@@ -831,6 +834,13 @@ class TestEncrypt(unittest.TestCase):
     def test_wrap_around(self):
         self.assertEqual(encrypt('zyxw'), 'cdef')
         self.assertEqual(encrypt('ZYXW'), 'CDEF')
+
+    # Newly added test cases # 
+    def test_wrap_around(self):
+        self.assertEqual(encrypt('zyxw'), 'dcba')
+        self.assertEqual(encrypt('ZYXW'), 'ZYXW')
+    def test_all_non_letters(self):
+        self.assertEqual(encrypt(".*123.*"), ".*123.*")
 
 # New added
 class TestCheckDictCase(unittest.TestCase):

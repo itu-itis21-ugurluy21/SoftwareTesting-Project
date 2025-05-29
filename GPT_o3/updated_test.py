@@ -700,11 +700,10 @@ class TestIsMultiplyPrime(unittest.TestCase):
         self.assertFalse(is_multiply_prime(0))
         self.assertFalse(is_multiply_prime(-30))
         self.assertFalse(is_multiply_prime(13))
+        
     ###self added tests###
     def test_6(self):
         self.assertFalse(is_multiply_prime(13*17*15))   
-    def test_7(self):
-        self.assertFalse(is_multiply_prime(13*17*7*0)) 
 
 
 class TestValidDate(unittest.TestCase):
