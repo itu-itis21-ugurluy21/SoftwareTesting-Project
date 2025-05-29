@@ -889,7 +889,4 @@ class TestCombinedOperations(unittest.TestCase):
 
 
     def test_non_string_input(self):
-      self.assertEqual(combined_operations(123), "")
-        
-
         self.assertEqual(combined_operations(123), "")
