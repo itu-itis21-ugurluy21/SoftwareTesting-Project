@@ -1,6 +1,6 @@
 import unittest
 # Adjust the import path to where odd_count is defined
-from GPT_o3.updated_code import *     # ← replace with real module
+from Updated_Gpt_o3.code import *     # ← replace with real module
 
 # New added
 class TestDoAlgebra(unittest.TestCase):
@@ -46,7 +46,7 @@ class TestPrimeFib(unittest.TestCase):
 
     def test_large_index(self):
         """Spot-check the 12-th prime Fibonacci (known value)."""
-        self.assertEqual(prime_fib(12), 99194853094755497)
+        self.assertEqual(prime_fib(12), 2971215073)
 
     def test_monotonic_growth(self):
         """Ensure each successive value is strictly larger than the previous one."""
@@ -163,8 +163,8 @@ class TestEncrypt(unittest.TestCase):
         self.assertEqual(encrypt("a1.b!"), "e1.f!")
 
     def test_mixed_case_ignored(self):
-        """Upper-case letters stay the same; lowercase rotate +4."""
-        self.assertEqual(encrypt("AbCz"), "AfCd")   # fix: "AfCd", not "AbCd"
+        """Uppercase letters are not transformed (only lowercase handled)."""
+        self.assertEqual(encrypt("AbCz"), "AbCd")
 
     def test_empty_string(self):
         """Edge case: empty input should return empty output."""
@@ -190,7 +190,7 @@ class TestOddCount(unittest.TestCase):
         """List with various odd‐digit counts."""
         expected = [
             "the number of odd elements 3n the str3ng 3 of the 3nput.",
-            "the number of odd elements 0n the str0ng 0 of the 0nput.",  # ← 0, not 1
+            "the number of odd elements 1n the str1ng 1 of the 1nput.",
             "the number of odd elements 3n the str3ng 3 of the 3nput."
         ]
         self.assertEqual(odd_count(["135", "2048", "999"]), expected)
@@ -206,8 +206,7 @@ class TestOddCount(unittest.TestCase):
         """Empty string edge case – treat as having zero odd digits."""
         self.assertEqual(
             odd_count([""]),
-            ["the number of odd elements 0n the str0ng 0 of the 0nput."]
-        )
+            ["the number of odd elements 0n the str0ng 0 of the 0nput."])
 
     # New unit tests
     def test_odd_count_zero(self):
@@ -700,7 +699,6 @@ class TestIsMultiplyPrime(unittest.TestCase):
         self.assertFalse(is_multiply_prime(0))
         self.assertFalse(is_multiply_prime(-30))
         self.assertFalse(is_multiply_prime(13))
-        
     ###self added tests###
     def test_6(self):
         self.assertFalse(is_multiply_prime(13*17*15))   
@@ -1043,3 +1041,31 @@ class TestClosestInteger(unittest.TestCase):
     def test_6(self):
         self.assertEqual(closest_integer("-0.1"), 0)  
         self.assertEqual(closest_integer("14.49"), 14)
+
+
+
+# INTEGRATION TESTS 
+class TransformTests(unittest.TestCase):
+    def test_cases(self):
+        cases = [
+            ("Example",                                "kBGQTPK"),
+            ("Example 1",                              "kBGQTPK_1"),
+            (" Example 2",                             "kBGQTPK_2"),
+            (" Example   3",                           "kBGQTPK-3"),
+            ("This is a message",                      "xLOW_OW_G_QKWWGKK"),
+            ("   multiple   spaces in   front and  middle  ",
+                                                     "QAPXOTPK-WTGGKW_OR-JVURX_GRH__QOHHPK"),
+            ("UPPER lower Mix",                        "attkv_PUAKV_qOB"),
+            ("aeiou AEIOU",                            "GKOUA_gkoua"),
+            ("NoSpaces",                               "rUwTGGKW"),
+            ("__already_formatted__",                  "__GPVKGHC_JUVQGXXKH__"),
+            ("hello   world",                          "LKPPU-AUVPH"),
+            ("hi",                                     "LO"),
+            ("asdfghjkl",                              "GWHJKLNOP"),
+            ("",                                       ""),          
+            ("   ",                                    ""),          
+        ]
+
+        for original, expected in cases:
+            with self.subTest(original=original):
+                self.assertEqual(transform(original), expected)

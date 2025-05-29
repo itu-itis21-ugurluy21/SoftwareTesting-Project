@@ -869,6 +869,12 @@ class TestIntToMiniRoman(unittest.TestCase):
         }
         for num, expected in subtractive_cases.items():
             self.assertEqual(int_to_mini_roman(num), expected)
+import signal
+class TimeoutException(Exception):
+    pass
+
+def timeout_handler(signum, frame):
+    raise TimeoutException("Test took too long!")
 
 class TestPrimeFib(unittest.TestCase):
 
@@ -899,8 +905,15 @@ class TestPrimeFib(unittest.TestCase):
 
     # Newly added tests #
     def test_prime_fib_zero_or_negative(self):
-        self.assertEqual(prime_fib(0), False)
-        self.assertEqual(prime_fib(-1), False)
+        signal.signal(signal.SIGALRM, timeout_handler)
+        signal.alarm(2) 
+        try:
+            self.assertEqual(prime_fib(0), False)
+            self.assertEqual(prime_fib(-1), False)
+        except TimeoutException:
+            self.fail("prime_fib() entered an infinite loop on invalid input!")
+        finally:
+            signal.alarm(0)  
 
 class TestNumericalLetterGrade(unittest.TestCase):
 
