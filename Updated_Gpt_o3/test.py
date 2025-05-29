@@ -1041,3 +1041,31 @@ class TestClosestInteger(unittest.TestCase):
     def test_6(self):
         self.assertEqual(closest_integer("-0.1"), 0)  
         self.assertEqual(closest_integer("14.49"), 14)
+
+
+
+# INTEGRATION TESTS 
+class TransformTests(unittest.TestCase):
+    def test_cases(self):
+        cases = [
+            ("Example",                                "kBGQTPK"),
+            ("Example 1",                              "kBGQTPK_1"),
+            (" Example 2",                             "kBGQTPK_2"),
+            (" Example   3",                           "kBGQTPK-3"),
+            ("This is a message",                      "xLOW_OW_G_QKWWGKK"),
+            ("   multiple   spaces in   front and  middle  ",
+                                                     "QAPXOTPK-WTGGKW_OR-JVURX_GRH__QOHHPK"),
+            ("UPPER lower Mix",                        "attkv_PUAKV_qOB"),
+            ("aeiou AEIOU",                            "GKOUA_gkoua"),
+            ("NoSpaces",                               "rUwTGGKW"),
+            ("__already_formatted__",                  "__GPVKGHC_JUVQGXXKH__"),
+            ("hello   world",                          "LKPPU-AUVPH"),
+            ("hi",                                     "LO"),
+            ("asdfghjkl",                              "GWHJKLNOP"),
+            ("",                                       ""),          
+            ("   ",                                    ""),          
+        ]
+
+        for original, expected in cases:
+            with self.subTest(original=original):
+                self.assertEqual(transform(original), expected)

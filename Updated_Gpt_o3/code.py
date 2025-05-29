@@ -882,3 +882,58 @@ def closest_integer(value: str) -> int:
         # for negatives: half-down (toward −∞) = away from zero
         return math.ceil(num - 0.5)
     
+# INTEGRATED CLASS
+
+import re
+
+def transform(text: str) -> str:
+    """
+    Combines the behaviour of fix_spaces → encode → encrypt
+    in one pass.
+
+    Steps performed, in order:
+    1. **fix_spaces**  
+       • Trim leading / trailing spaces.  
+       • Replace runs of **3 +** spaces with “-”.  
+       • Replace any remaining spaces (1 or 2) with “_”.
+
+    2. **encode**  
+       • Swap case of every letter.  
+       • For the swapped‐case vowels (a, e, i, o, u in either case),
+         replace each with the letter two positions ahead in the alphabet
+         (preserving case).
+
+    3. **encrypt**  
+       • Rotate every alphabetic character **+4** positions
+         (again preserving case).  
+       • Non-letters (digits, “_”, “-”, etc.) are left unchanged.
+    """
+    # ---------- 1. fix_spaces ----------
+    text = text.strip()                       # remove leading/trailing spaces
+    text = re.sub(r' {3,}', '-', text)        # 3 or more consecutive → “-”
+    text = text.replace(' ', '_')             # remaining single/double spaces → “_”
+
+    # ---------- 2. encode (swap-case + vowel shift) ----------
+    vowels = "aeiou"
+    encoded_chars = []
+    for ch in text:
+        if ch.isalpha():
+            ch_swapped = ch.swapcase()
+            if ch_swapped.lower() in vowels:  # vowel after swapping?
+                base = ord('A') if ch_swapped.isupper() else ord('a')
+                ch_swapped = chr(base + ((ord(ch_swapped) - base + 2) % 26))
+            encoded_chars.append(ch_swapped)
+        else:
+            encoded_chars.append(ch)
+    text = ''.join(encoded_chars)
+
+    # ---------- 3. encrypt (Caesar +4) ----------
+    result = []
+    for ch in text:
+        if ch.isalpha():
+            base = ord('A') if ch.isupper() else ord('a')
+            result.append(chr(base + ((ord(ch) - base + 4) % 26)))
+        else:
+            result.append(ch)
+
+    return ''.join(result)
