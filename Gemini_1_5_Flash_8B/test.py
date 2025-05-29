@@ -892,3 +892,4 @@ class TestCombinedOperations(unittest.TestCase):
       self.assertEqual(combined_operations(123), "")
         
 
+        self.assertEqual(combined_operations(123), "")
