@@ -865,3 +865,55 @@ def check_dict_case(dict):
             return False  # Key is not all lower or all upper
 
     return all_lower or all_upper
+
+
+def combined_operations(text):
+    """
+    Combines fix_spaces, encode, and encrypt operations on a string.
+
+    Args:
+        text: The input string.
+
+    Returns:
+        The final encrypted string.  Returns an empty string if input is not a string.
+    """
+
+    if not isinstance(text, str):
+        return ""
+    
+    # fix_spaces implementation
+    new_text = ""
+    i = 0
+    start, end = 0, 0
+    while i < len(text):
+        if text[i] == " ":
+            end += 1
+        else:
+            if end - start > 2:
+                new_text += "-" + text[i]
+            elif end - start > 0:
+                new_text += "_" * (end - start) + text[i]
+            else:
+                new_text += text[i]
+            start, end = i + 1, i + 1
+        i += 1
+    if end - start > 2:
+        new_text += "-"
+    elif end - start > 0:
+        new_text += "_"  
+
+    # encode implementation
+    vowels = "aeiouAEIOU"
+    vowels_replace = {char: chr(ord(char) + 2) for char in vowels}
+    encoded_text = "".join([vowels_replace.get(char, char.swapcase()) for char in new_text])
+    
+    # encrypt implementation
+    d = 'abcdefghijklmnopqrstuvwxyz'
+    encrypted_text = ''
+    for char in encoded_text:
+        if char.lower() in d:
+            encrypted_text += d[(d.index(char.lower()) + 4) % 26]  # Rotated by 4 places
+        else:
+            encrypted_text += char
+            
+    return encrypted_text

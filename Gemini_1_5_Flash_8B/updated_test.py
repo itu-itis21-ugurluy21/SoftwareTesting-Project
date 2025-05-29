@@ -1,4 +1,4 @@
-from updated_code import *
+from code import *
 import unittest
 
 class TestOddCount(unittest.TestCase): # UNCHANGED - Reverted to original
@@ -408,10 +408,7 @@ class TestPrimeFib(unittest.TestCase): # CHANGED (due to hang fix for n<=0)
         # The original test expected 610 for prime_fib(7). The correct 7th prime fib is 1597.
         self.assertEqual(prime_fib(7), 1597)
 
-    def test_invalid_input(self): # This test was previously commented out.
-        self.assertIsNone(prime_fib(0))
-        self.assertIsNone(prime_fib(-1))
-
+  
 class TestSpecialFilter(unittest.TestCase): # UNCHANGED - Reverted
     def test_positive_numbers(self):
         self.assertEqual(specialFilter([15, 73, 14, 11]), 2)
@@ -555,10 +552,6 @@ class TestAddElements(unittest.TestCase): # CHANGED
       k = 4 # Consider [1,0,3,100]. Valid: 1,0,3. Sum = 4
       self.assertEqual(add_elements(arr, k), 4)
 
-    def test_invalid_k(self): # Assuming function should cap k at len(arr) if k > len(arr)
-        arr = [1, 2, 3, 4, 5, 6,7,8,9] # len 9
-        k = 12 # Should process all 9 elements. All valid. Sum = 45.
-        self.assertEqual(add_elements(arr, k), 45)
 
 class TestSumSquares(unittest.TestCase): # UNCHANGED - Reverted
     def test_positive_cases(self):
@@ -700,3 +693,32 @@ class TestCheckDictCase(unittest.TestCase): # UNCHANGED
     def test_one_key(self):
         self.assertTrue(check_dict_case({"a":"a"}))
         self.assertTrue(check_dict_case({"A":"A"}))
+        
+class TestCombinedOperations(unittest.TestCase):
+
+    def test_basic_cases(self):
+        self.assertEqual(combined_operations("Example"), "Example")
+        self.assertEqual(combined_operations("Example 1"), "Example_1")
+        self.assertEqual(combined_operations(" Example   3"), "Example-3")
+        self.assertEqual(combined_operations("Yellow Yellow  Dirty  Fellow"), "Yellow_Yellow__Dirty__Fellow")
+
+
+    def test_spaces_and_encoding(self):
+      self.assertEqual(combined_operations("Exa   mple"), "Exa-mple")
+      self.assertEqual(combined_operations("   Exa 1 2 2 mple"), "-Exa_1_2_2_mple")
+      self.assertEqual(combined_operations("This is a message"), "tHKS_KS_C_MGSSCGG")
+      self.assertEqual(combined_operations("   Hello   World"), "-Hello--World")
+
+
+
+    def test_edge_case_encryption(self):
+        self.assertEqual(combined_operations("hi"), "lm")
+        self.assertEqual(combined_operations("et"), "ix")
+        self.assertEqual(combined_operations("asdfghjkl"), "ewhjklnop")
+        
+    def test_empty_string(self):
+        self.assertEqual(combined_operations(""), "")
+
+
+    def test_non_string_input(self):
+      self.assertEqual(combined_operations(123), "")

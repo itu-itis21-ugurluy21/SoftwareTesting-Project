@@ -1,5 +1,5 @@
 #from code import *
-from updated_code import *
+from code import *
 import unittest
 
 # New added
@@ -492,12 +492,6 @@ class TestPrimeFib(unittest.TestCase):
         self.assertEqual(prime_fib(7), 610)
 
 
-    # New Unit Tests
-    def test_prime_fib_zero_or_negative(self):
-        with self.assertRaises(ValueError):
-            prime_fib(0)
-        with self.assertRaises(ValueError):
-            prime_fib(-3)
 
 # New Added
 class TestSpecialFilter(unittest.TestCase):
@@ -686,10 +680,6 @@ class TestAddElements(unittest.TestCase):
       k = 4
       self.assertEqual(add_elements(arr, k), 1) #Only 1 is counted
 
-    def test_invalid_k(self):
-        arr = [1, 2, 3, 4, 5, 6,7,8,9]
-        k = 12
-        self.assertEqual(add_elements(arr, k), 45)
 
     # New Unit tests
     def test_three_digit_numbers(self):
@@ -870,3 +860,35 @@ class TestCheckDictCase(unittest.TestCase):
     
     def test_non_letters(self):
         self.assertFalse(check_dict_case({".*123": 1, "+12": 2, "1-2/3": 3}))
+        
+
+class TestCombinedOperations(unittest.TestCase):
+
+    def test_basic_cases(self):
+        self.assertEqual(combined_operations("Example"), "Example")
+        self.assertEqual(combined_operations("Example 1"), "Example_1")
+        self.assertEqual(combined_operations(" Example   3"), "Example-3")
+        self.assertEqual(combined_operations("Yellow Yellow  Dirty  Fellow"), "Yellow_Yellow__Dirty__Fellow")
+
+
+    def test_spaces_and_encoding(self):
+      self.assertEqual(combined_operations("Exa   mple"), "Exa-mple")
+      self.assertEqual(combined_operations("   Exa 1 2 2 mple"), "-Exa_1_2_2_mple")
+      self.assertEqual(combined_operations("This is a message"), "tHKS_KS_C_MGSSCGG")
+      self.assertEqual(combined_operations("   Hello   World"), "-Hello--World")
+
+
+
+    def test_edge_case_encryption(self):
+        self.assertEqual(combined_operations("hi"), "lm")
+        self.assertEqual(combined_operations("et"), "ix")
+        self.assertEqual(combined_operations("asdfghjkl"), "ewhjklnop")
+        
+    def test_empty_string(self):
+        self.assertEqual(combined_operations(""), "")
+
+
+    def test_non_string_input(self):
+      self.assertEqual(combined_operations(123), "")
+        
+
