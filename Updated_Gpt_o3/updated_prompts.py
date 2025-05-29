@@ -2,7 +2,7 @@
 
 
 
-"\n\ndef prime_fib(n: int):\n \"\"\"\n prime_fib returns n-th number that is a Fibonacci number and it's also prime.\n >>> prime_fib(1)\n 2\n >>> prime_fib(2)\n 3\n >>> prime_fib(3)\n 5\n >>> prime_fib(4)\n 13\n >>> prime_fib(5)\n 89\n \"\"\"\n Make sure that the code does not produce any bugs"
+"\n\ndef prime_fib(n: int):\n \"\"\"\n prime_fib returns n-th number that is a Fibonacci number and it's also prime.\n >>> prime_fib(1)\n 2\n >>> prime_fib(2)\n 3\n >>> prime_fib(3)\n 5\n >>> prime_fib(4)\n 13\n >>> prime_fib(5)\n 89\n \"\"\"\n make sure to handle the given input constraints."
 
 
 r''' 

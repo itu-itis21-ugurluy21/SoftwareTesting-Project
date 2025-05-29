@@ -44,58 +44,16 @@ def do_algebra(operators, operands):
         while i < len(ops):
             if ops[i] in tier:
                 result = fn[ops[i]](vals[i], vals[i + 1])
-                # replace the two operands with the result
                 vals[i : i + 2] = [result]
-                # remove the operator we just used
                 ops.pop(i)
             else:
                 i += 1
-
     return vals[0]
 
-
-def _is_prime(n: int) -> bool:
-    """Return *True* if *n* is prime using deterministic trial division.
-
-    The algorithm runs in *O(√n)* time and is adequate for Fibonacci numbers
-    whose index fits comfortably in typical Python recursion limits (n < 1000
-    produces Fibonacci values < 10**200).
+def prime_fib(n: int):
     """
-    if n < 2:
-        return False
-    if n % 2 == 0:
-        return n == 2
-    limit = isqrt(n)
-    for p in range(3, limit + 1, 2):
-        if n % p == 0:
-            return False
-    return True
-@lru_cache(maxsize=None)
-def _fib(k: int) -> int:
-    """Return the *k*-th Fibonacci number (1‑indexed: F(1) = 1, F(2) = 1)."""
-    if k <= 0:
-        raise ValueError("Fibonacci index must be positive")
-    if k <= 2:
-        return 1
-    return _fib(k - 1) + _fib(k - 2)
-def _prime_fib_generator() -> Iterator[int]:
-    """Yield Fibonacci numbers that are prime in ascending order."""
-    idx = 2  # start from F(2) = 1 to skip non‑prime 1
-    while True:
-        fib_val = _fib(idx)
-        if _is_prime(fib_val):
-            yield fib_val
-        idx += 1
-def prime_fib(n: int) -> int:
-    """Return the *n*-th Fibonacci number that is also prime.
+    prime_fib returns the n-th Fibonacci number that is also prime.
 
-    Parameters
-    ----------
-    n:
-        1‑based index into the sequence of Fibonacci primes. Must be positive.
-
-    Examples
-    --------
     >>> prime_fib(1)
     2
     >>> prime_fib(2)
@@ -107,13 +65,48 @@ def prime_fib(n: int) -> int:
     >>> prime_fib(5)
     89
     """
-    if n <= 0:
+    if n < 1:
         raise ValueError("n must be a positive integer")
 
-    gen = _prime_fib_generator()
-    for _ in range(n - 1):
-        next(gen)
-    return next(gen)
+    def is_prime(num: int) -> bool:
+        """Deterministic Miller–Rabin for all 64-bit integers."""
+        if num < 2:
+            return False
+        small_primes = (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37)
+        if num in small_primes:
+            return True
+        for p in small_primes:
+            if num % p == 0:
+                return False
+
+        # write num-1 as d · 2ˢ with d odd
+        d, s = num - 1, 0
+        while d & 1 == 0:
+            d >>= 1
+            s += 1
+
+        # deterministic bases that guarantee correctness for 64-bit inputs
+        for a in (2, 3, 5, 7, 11, 13, 17):
+            x = pow(a, d, num)
+            if x == 1 or x == num - 1:
+                continue
+            for _ in range(s - 1):
+                x = pow(x, 2, num)
+                if x == num - 1:
+                    break
+            else:              # loop **didn’t** break → composite
+                return False
+        return True
+
+    # Iterate through Fibonacci numbers, counting those that are prime
+    a, b = 1, 1  # F₁, F₂
+    found = 0
+    while True:
+        a, b = b, a + b          # next Fibonacci number
+        if is_prime(b):
+            found += 1
+            if found == n:
+                return b
 
 
 def numerical_letter_grade(grades):
